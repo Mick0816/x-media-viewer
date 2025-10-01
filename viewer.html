@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X メディアポストビューア</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1f2937;
+      color: white;
+      overflow: hidden;
+    }
+    
+    .header {
+      background: #111827;
+      border-bottom: 1px solid #374151;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .header h1 {
+      font-size: 20px;
+      color: #ec4899;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .page-info {
+      color: #d1d5db;
+      font-size: 14px;
+    }
+    
+    .view-toggle {
+      background: #374151;
+      border: none;
+      color: #d1d5db;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .view-toggle:hover {
+      background: #4b5563;
+      color: white;
+    }
+    
+    .main-container {
+      height: calc(100vh - 120px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+    
+    .image-container {
+      max-width: 900px;
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+    
+    .image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.9);
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .nav-button:hover {
+      background: white;
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    .nav-button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    .nav-button.prev {
+      left: 40px;
+    }
+    
+    .nav-button.next {
+      right: 40px;
+    }
+    
+    .footer {
+      background: #111827;
+      border-top: 1px solid #374151;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .footer-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #374151;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .footer-button:hover:not(:disabled) {
+      background: #4b5563;
+    }
+    
+    .footer-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .keyboard-hint {
+      color: #9ca3af;
+      font-size: 13px;
+    }
+    
+    .grid-view {
+      height: calc(100vh - 70px);
+      overflow-y: auto;
+      padding: 20px;
+    }
+    
+    .grid-header {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #1f2937;
+    }
+    
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    .grid-item {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .grid-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+    }
+    
+    .grid-item img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+    
+    .grid-item-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      padding: 15px;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .no-images {
+      text-align: center;
+      padding: 60px 20px;
+      color: #9ca3af;
+    }
+    
+    .no-images h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📷 X メディアビューア</h1>
+    <div class="header-right">
+      <span class="page-info" id="pageInfo">-</span>
+      <button class="view-toggle" id="viewToggle">一覧表示</button>
+    </div>
+  </div>
+  
+  <div id="readerView" class="main-container">
+    <button class="nav-button prev" id="prevBtn">◀</button>
+    <div class="image-container">
+      <img id="currentImage" src="" alt="メディア">
+    </div>
+    <button class="nav-button next" id="nextBtn">▶</button>
+  </div>
+  
+  <div id="gridView" class="grid-view" style="display: none;">
+    <div class="grid-header">
+      <h2 id="gridTitle">-</h2>
+      <button class="view-toggle" id="backToReader">読む</button>
+    </div>
+    <div class="grid-container" id="gridContainer"></div>
+  </div>
+  
+  <div class="footer">
+    <button class="footer-button" id="footerPrevBtn">← 前へ</button>
+    <span class="keyboard-hint">キーボードの ← → でも操作できるよ!</span>
+    <button class="footer-button" id="footerNextBtn">次へ →</button>
+  </div>
+  
+  <script src="viewer.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X メディアポストビューア</title>
+  <style>
+    body {
+      width: 320px;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #ffeef8 0%, #e0f2ff 100%);
+    }
+    
+    h1 {
+      font-size: 20px;
+      color: #ec4899;
+      margin: 0 0 15px 0;
+      text-align: center;
+    }
+    
+    .status {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .status-text {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 10px;
+    }
+    
+    .button-primary {
+      background: #ec4899;
+      color: white;
+    }
+    
+    .button-primary:hover {
+      background: #db2777;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+    }
+    
+    .button-secondary {
+      background: #3b82f6;
+      color: white;
+    }
+    
+    .button-secondary:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .button-danger {
+      background: #ef4444;
+      color: white;
+    }
+    
+    .button-danger:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+    
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .button-group .button {
+      margin-bottom: 10px;
+    }
+    
+    .loading {
+      text-align: center;
+      color: #ec4899;
+      font-weight: bold;
+      padding: 10px;
+    }
+    
+    .error {
+      background: #fee;
+      color: #c33;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+    
+    .success {
+      background: #efe;
+      color: #3a3;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+    
+    .info {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      margin-top: 15px;
+      color: #856404;
+    }
+  </style>
+</head>
+<body>
+  <h1>📷 X メディアビューア</h1>
+  
+  <div class="status">
+    <div class="status-text" id="statusText">
+      準備完了!<br>
+      どんなXアカウントのメディアでも<br>
+      画像を自動収集できるよ!
+    </div>
+  </div>
+  
+  <button id="collectBtn" class="button button-primary">
+    🚀 自動収集スタート!
+  </button>
+  
+  <button id="stopBtn" class="button button-danger" style="display: none;">
+    ⏹️ 収集を停止
+  </button>
+  
+  <button id="viewBtn" class="button button-secondary" disabled>
+    📖 ビューアで読む
+  </button>
+  
+  <div class="info">
+    💡 ヒント: 自動でスクロールして画像を集めるよ! 途中で止めたい時はストップボタンを押してね!
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
